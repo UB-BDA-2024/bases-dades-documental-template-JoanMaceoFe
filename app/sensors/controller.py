@@ -74,8 +74,8 @@ def delete_sensor(sensor_id: int, db: Session = Depends(get_db), mongodb_client:
     db_sensor = repository.get_sensor(db, sensor_id)
     if db_sensor is None:
         raise HTTPException(status_code=404, detail="Sensor not found")
-    raise HTTPException(status_code=404, detail="Not implemented")
- #   return repository.delete_sensor(db=db, sensor_id=sensor_id)
+    
+    return repository.delete_sensor(db=db, sensor_id=sensor_id)
     
 
 # 🙋🏽‍♀️ Add here the route to update a sensor
