@@ -41,9 +41,8 @@ router = APIRouter(
 
 # 🙋🏽‍♀️ Add here the route to get a list of sensors near to a given location
 @router.get("/near")
-def get_sensors_near(latitude: float, longitude: float, db: Session = Depends(get_db),mongodb_client: MongoDBClient = Depends(get_mongodb_client)):
-    raise HTTPException(status_code=404, detail="Not implemented")
-    #return repository.get_sensors_near(mongodb=mongodb_client, latitude=latitude, longitude=longitude)
+def get_sensors_near(latitude: float, longitude: float, radius: float, db: Session = Depends(get_db),mongodb_client: MongoDBClient = Depends(get_mongodb_client), redis_client: RedisClient = Depends(get_redis_client)):
+    return repository.get_sensors_near(mongodb=mongodb_client, redis_client=redis_client, latitude=latitude, longitude=longitude)
 
 
 # 🙋🏽‍♀️ Add here the route to get all sensors
@@ -84,6 +83,7 @@ def record_data(sensor_id: int, data: schemas.SensorData,db: Session = Depends(g
     db_sensor = repository.get_sensor(db=db, sensor_id=sensor_id)
     if db_sensor is None:
         raise HTTPException(status_code=404, detail="Sensor not found")
+    data.name = db_sensor.name
     return repository.record_data(redis=redis_client, sensor_id=sensor_id, data=data)
 
 # 🙋🏽‍♀️ Add here the route to get data from a sensor

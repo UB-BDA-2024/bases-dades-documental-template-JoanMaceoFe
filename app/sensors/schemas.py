@@ -31,6 +31,7 @@ class SensorCreate(BaseModel):
     firmware_version: str
 
 class SensorData(BaseModel):
+    name: Optional[str] = None
     velocity: Optional[float] = None
     temperature: Optional[float] = None
     humidity: Optional[float] = None
