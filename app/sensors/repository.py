@@ -93,13 +93,16 @@ def delete_sensor(db: Session, sensor_id: int):
     return db_sensor
 
 def get_sensors_near(mongodb: MongoDBClient,  redis_client: Session, latitude: float, longitude: float):
+    # criteri de cerca
     query = {"latitude": latitude, "longitude": longitude}
+    # Busquem a les dues coleccions
     mongodb_database = mongodb.getDatabase("sensors")
     mongodb_collection_velocitat = mongodb.getCollection("sensors velocitat")
     sensors_velocitat = mongodb_collection_velocitat.find(query)
     mongodb_collection_temperatura = mongodb.getCollection("sensors temperatura")
     sensors_temperatura = mongodb_collection_temperatura.find(query)
 
+   # Afegim cada cerca al resultat 
     sensors = []
     for sensor_temperatura in sensors_temperatura:
         sensors.append(get_data(redis_client, sensor_temperatura['id']))
